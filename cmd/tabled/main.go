@@ -20,9 +20,11 @@ package main
 import (
 	"log"
 
+	"github.com/nyrahul/tabled/pkg/json2table"
 	"github.com/nyrahul/tabled/pkg/version"
 )
 
 func main() {
 	log.Printf("version: %s\n", version.Version)
+	json2table.Json2Table()
 }
