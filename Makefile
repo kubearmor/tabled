@@ -43,7 +43,7 @@ REGISTRY_PASSWORD ?= $$(gcloud auth print-access-token)
 VERSION ?= $(shell git describe --tags --always --dirty)
 #
 # This version-strategy uses a manual value to set the version string
-#VERSION ?= 1.2.3
+VERSION = 0.1.0
 
 # Set this to 1 to build a debugger-friendly binaries.
 DBG ?=

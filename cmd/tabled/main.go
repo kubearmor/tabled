@@ -19,12 +19,36 @@ package main
 
 import (
 	"log"
+	"strings"
 
-	"github.com/nyrahul/tabled/pkg/json2table"
+	"github.com/nyrahul/tabled/pkg/drawtable"
 	"github.com/nyrahul/tabled/pkg/version"
+	"github.com/spf13/cobra"
 )
+
+var inFile string
+
+// rootCmd represents the base command when called without any subcommands
+var rootCmd = &cobra.Command{
+	Run: func(cmd *cobra.Command, args []string) {
+	},
+	Use:           "tabled",
+	Short:         "Table Designer",
+	Long:          `CLI Utility to help plot a table from csv/json input`,
+	SilenceUsage:  true,
+	SilenceErrors: true,
+}
+
+func init() {
+	rootCmd.PersistentFlags().StringVar(&inFile, "in", "", "file whose contents are to be plotted in the table")
+}
 
 func main() {
 	log.Printf("version: %s\n", version.Version)
-	json2table.Json2Table()
+	cobra.CheckErr(rootCmd.Execute())
+	if strings.HasSuffix(inFile, ".csv") {
+		drawtable.Csv2Table(inFile)
+	} else {
+		log.Fatal("--in option not provided or unsupported file extn")
+	}
 }

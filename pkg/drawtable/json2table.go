@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 // Package json2table convert input json to table format
-package json2table
+package drawtable
 
 import (
 	"log"
