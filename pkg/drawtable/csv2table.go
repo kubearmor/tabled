@@ -23,6 +23,7 @@ import (
 	"os"
 
 	"github.com/jedib0t/go-pretty/v6/table"
+	"github.com/nyrahul/tabled/pkg/config"
 )
 
 func readCsvFile(filePath string) [][]string {
@@ -49,13 +50,19 @@ func getRow(rec []string) table.Row {
 	return row
 }
 
-func Csv2Table(infile string) {
-	records := readCsvFile(infile)
+func Csv2Table(cfg config.Config) {
+	records := readCsvFile(cfg.InFile)
 	if len(records) <= 1 {
-		log.Fatal("insufficient entries in file " + infile)
+		log.Fatal("insufficient entries in file " + cfg.InFile)
 	}
 
 	t := table.NewWriter()
+	if cfg.Caption != "" {
+		t.SetCaption(cfg.Caption)
+	}
+	if cfg.Title != "" {
+		t.SetTitle(cfg.Title)
+	}
 	t.SetOutputMirror(os.Stdout)
 	for idx, rec := range records {
 		if idx == 0 {
@@ -67,4 +74,5 @@ func Csv2Table(infile string) {
 	t.SetStyle(table.StyleLight)
 	//	t.SetStyle(table.StyleColoredBright)
 	t.Render()
+	// t.RenderMarkdown()
 }

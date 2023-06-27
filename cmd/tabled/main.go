@@ -1,5 +1,5 @@
 /*
-Copyright 2016 The Kubernetes Authors.
+Copyright 2023 Rahul Jadhav
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,12 +21,13 @@ import (
 	"log"
 	"strings"
 
+	"github.com/nyrahul/tabled/pkg/config"
 	"github.com/nyrahul/tabled/pkg/drawtable"
 	"github.com/nyrahul/tabled/pkg/version"
 	"github.com/spf13/cobra"
 )
 
-var inFile string
+var cfg config.Config
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -40,14 +41,16 @@ var rootCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.PersistentFlags().StringVar(&inFile, "in", "", "file whose contents are to be plotted in the table")
+	rootCmd.PersistentFlags().StringVar(&cfg.InFile, "in", "", "file whose contents are to be plotted in the table")
+	rootCmd.PersistentFlags().StringVar(&cfg.Title, "title", "", "title to be used for the table")
+	rootCmd.PersistentFlags().StringVar(&cfg.Caption, "caption", "", "caption to be used for the table")
 }
 
 func main() {
 	log.Printf("version: %s\n", version.Version)
 	cobra.CheckErr(rootCmd.Execute())
-	if strings.HasSuffix(inFile, ".csv") {
-		drawtable.Csv2Table(inFile)
+	if strings.HasSuffix(cfg.InFile, ".csv") {
+		drawtable.Csv2Table(cfg)
 	} else {
 		log.Fatal("--in option not provided or unsupported file extn")
 	}
