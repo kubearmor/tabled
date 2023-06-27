@@ -1,0 +1,14 @@
+---
+table:
+  title: "Kubernetes Cluster Service Ports status"
+columns:
+  - name: STATUS
+    spec: PLAIN_TEXT
+    color:
+      - BgYellow
+      - FgRed
+  - name: STATUS
+    spec: CONNFAIL
+    color:
+      - BgYellow
+      - FgBlack

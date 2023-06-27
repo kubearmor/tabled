@@ -17,8 +17,48 @@ limitations under the License.
 // Package config is the entrypoint for tabled
 package config
 
+import (
+	"io/ioutil"
+	"log"
+
+	"sigs.k8s.io/yaml"
+)
+
+type TableConfig struct {
+	Title   string `yaml:"title"`
+	Caption string `yaml:"caption"`
+}
+
+type ColConfig struct {
+	Name  string   `yaml:"name"`
+	Spec  string   `yaml:"spec"`
+	Color []string `yaml:"color"`
+}
+
+type YamlConfig struct {
+	Table   TableConfig `yaml:"table"`
+	Columns []ColConfig `yaml:"columns"`
+}
+
 type Config struct {
 	InFile  string
-	Caption string
-	Title   string
+	YamlCfg YamlConfig
+}
+
+func LoadYAMLConfig(file string) YamlConfig {
+	if file == "" {
+		return YamlConfig{}
+	}
+	data, err := ioutil.ReadFile(file)
+	if err != nil {
+		log.Fatalf("failed reading from yaml config <%s> error: %v", file, err)
+	}
+	log.Printf("reading from yaml config <%s>", file)
+	y := YamlConfig{}
+	err = yaml.Unmarshal([]byte(data), &y)
+	if err != nil {
+		log.Fatalf("failed to read yaml config. error: %v", err)
+	}
+	//	fmt.Printf("%+v\n", y)
+	return y
 }

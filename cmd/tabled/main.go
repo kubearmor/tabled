@@ -28,6 +28,7 @@ import (
 )
 
 var cfg config.Config
+var yamlFile string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -42,13 +43,13 @@ var rootCmd = &cobra.Command{
 
 func init() {
 	rootCmd.PersistentFlags().StringVar(&cfg.InFile, "in", "", "file whose contents are to be plotted in the table")
-	rootCmd.PersistentFlags().StringVar(&cfg.Title, "title", "", "title to be used for the table")
-	rootCmd.PersistentFlags().StringVar(&cfg.Caption, "caption", "", "caption to be used for the table")
+	rootCmd.PersistentFlags().StringVar(&yamlFile, "config", "", "configuration to be used (yaml)")
 }
 
 func main() {
 	log.Printf("version: %s\n", version.Version)
 	cobra.CheckErr(rootCmd.Execute())
+	cfg.YamlCfg = config.LoadYAMLConfig(yamlFile)
 	if strings.HasSuffix(cfg.InFile, ".csv") {
 		drawtable.Csv2Table(cfg)
 	} else {

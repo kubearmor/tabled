@@ -23,6 +23,7 @@ import (
 	"os"
 
 	"github.com/jedib0t/go-pretty/v6/table"
+	//"github.com/jedib0t/go-pretty/v6/text"
 	"github.com/nyrahul/tabled/pkg/config"
 )
 
@@ -57,11 +58,11 @@ func Csv2Table(cfg config.Config) {
 	}
 
 	t := table.NewWriter()
-	if cfg.Caption != "" {
-		t.SetCaption(cfg.Caption)
+	if cfg.YamlCfg.Table.Caption != "" {
+		t.SetCaption(cfg.YamlCfg.Table.Caption)
 	}
-	if cfg.Title != "" {
-		t.SetTitle(cfg.Title)
+	if cfg.YamlCfg.Table.Title != "" {
+		t.SetTitle(cfg.YamlCfg.Table.Title)
 	}
 	t.SetOutputMirror(os.Stdout)
 	for idx, rec := range records {
@@ -71,6 +72,18 @@ func Csv2Table(cfg config.Config) {
 			t.AppendRow(getRow(rec))
 		}
 	}
+	/*
+		t.SetRowPainter(func(row table.Row) text.Colors {
+			if status, ok := row[2].(string); ok {
+				fmt.Printf("Status=%s\n", status)
+				if status == "PLAIN_TEXT" {
+					return text.Colors{text.FgRed}
+				} else if status == "CONNFAIL" {
+					return text.Colors{text.FgYellow}
+				}
+			}
+			return nil
+		})*/
 	t.SetStyle(table.StyleLight)
 	//	t.SetStyle(table.StyleColoredBright)
 	t.Render()
