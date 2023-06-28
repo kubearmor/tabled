@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// Package main is the entrypoint for tabled
-package main
+// Package cmd is the entrypoint for tabled
+package cmd
 
 import (
 	"log"
@@ -46,7 +46,9 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&yamlFile, "config", "", "configuration to be used (yaml)")
 }
 
-func main() {
+// Execute adds all child commands to the root command and sets flags appropriately.
+// This is called by main.main(). It only needs to happen once to the rootCmd.
+func Execute() {
 	log.Printf("version: %s\n", version.Version)
 	cobra.CheckErr(rootCmd.Execute())
 	cfg.YamlCfg = config.LoadYAMLConfig(yamlFile)
