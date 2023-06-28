@@ -30,9 +30,13 @@ type TableConfig struct {
 }
 
 type ColConfig struct {
-	Name  string   `yaml:"name"`
-	Spec  string   `yaml:"spec"`
-	Color []string `yaml:"color"`
+	Name      string   `yaml:"name"`
+	Spec      string   `yaml:"spec"`
+	Color     []string `yaml:"color"`
+	MaxWidth  int      `yaml:"maxwidth"`
+	MinWidth  int      `yaml:"minwidth"`
+	Align     string   `yaml:"align"`
+	AutoMerge bool     `yaml:"automerge"`
 }
 
 type YamlConfig struct {

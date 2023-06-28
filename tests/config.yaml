@@ -1,15 +1,34 @@
 # color spec:
-# Reset, Bold, Faint, Italic, Underline, BlinkSlow, BlinkRapid, ReverseVideo, Concealed, CrossedOut
-# {Fg, Bg, FgHi, BgHi} => Black, Red, Green, Yellow, Blue, Magenta, Cyan, White
+#   Reset, Bold, Faint, Italic, Underline, BlinkSlow, BlinkRapid, ReverseVideo, Concealed, CrossedOut
+#   {Fg, Bg, FgHi, BgHi} => Black, Red, Green, Yellow, Blue, Magenta, Cyan, White
+#
+# align spec:
+#   default | left | center | justify | right
+#   ref: https://github.com/jedib0t/go-pretty/blob/main/text/align.go#L11
+#
+# columns:
+#   - name: XYZ
+#     maxwidth: 10
+#     minwidth: 10
+#     align: center
+#     automerge: true
+#     spec: REGEX
+#     color:
+#       - FgRed
+#       - BgYellow
 ---
 table:
   title: "Kubernetes Cluster Service Ports status"
 columns:
+  - name: Name
+    maxwidth: 30
+    align: center
   - name: Status
     spec: PLAIN_TEXT
     color:
       - FgRed
   - name: Status
+    align: center
     spec: "CONN.*"
     color:
       - FgYellow

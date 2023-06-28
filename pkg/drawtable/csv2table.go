@@ -25,8 +25,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/jedib0t/go-pretty/table"
-	"github.com/jedib0t/go-pretty/text"
+	"github.com/jedib0t/go-pretty/v6/table"
+	"github.com/jedib0t/go-pretty/v6/text"
 	"golang.org/x/exp/slices"
 
 	//"github.com/jedib0t/go-pretty/v6/text"
@@ -98,6 +98,48 @@ func getTextColors(col config.ColConfig) text.Colors {
 	return colors
 }
 
+func getAlign(align string) text.Align {
+	if align == "" {
+		return text.AlignDefault
+	}
+	alignSet := []string{"default", "left", "center", "justify", "right"}
+	i := slices.Index(alignSet, align)
+	if i < 0 {
+		return text.AlignDefault
+	}
+	return text.Align(i)
+}
+
+func getColConfig(col config.ColConfig) (table.ColumnConfig, error) {
+	var colcfg table.ColumnConfig
+	colcfg.Name = col.Name
+	colcfg.Align = getAlign(col.Align)
+	colcfg.AlignHeader = colcfg.Align
+	if col.MaxWidth > 0 {
+		colcfg.WidthMax = col.MaxWidth
+	}
+	colcfg.AutoMerge = col.AutoMerge
+	if col.MinWidth > 0 {
+		colcfg.WidthMin = col.MinWidth
+	}
+	return colcfg, nil
+}
+
+func getAllColConfigs(hdr []string, cols []config.ColConfig) []table.ColumnConfig {
+	var colcfgs []table.ColumnConfig
+	for _, col := range cols {
+		idx := slices.Index(hdr, col.Name)
+		if idx < 0 {
+			continue
+		}
+		c, err := getColConfig(col)
+		if err == nil {
+			colcfgs = append(colcfgs, c)
+		}
+	}
+	return colcfgs
+}
+
 func Csv2Table(cfg config.Config) {
 	records := readCsvFile(cfg.InFile)
 	if len(records) <= 1 {
@@ -121,11 +163,18 @@ func Csv2Table(cfg config.Config) {
 			t.AppendRow(getRow(rec))
 		}
 	}
+	colcfgs := getAllColConfigs(hdr, cfg.YamlCfg.Columns)
+	if len(colcfgs) > 0 {
+		t.SetColumnConfigs(colcfgs)
+	}
 	t.SetRowPainter(func(row table.Row) text.Colors {
 		for _, col := range cfg.YamlCfg.Columns {
 			idx := slices.Index(hdr, col.Name)
 			colors := getTextColors(col)
-			if idx < 0 && len(colors) <= 0 {
+			if idx < 0 {
+				continue
+			}
+			if len(colors) <= 0 || col.Spec == "" {
 				continue
 			}
 			if colval, ok := row[idx].(string); ok {
