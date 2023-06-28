@@ -29,14 +29,18 @@ type TableConfig struct {
 	Caption string `yaml:"caption"`
 }
 
+type Paint struct {
+	Regex string   `yaml:"regex"`
+	Color []string `yaml:"color"`
+}
+
 type ColConfig struct {
-	Name      string   `yaml:"name"`
-	Spec      string   `yaml:"spec"`
-	Color     []string `yaml:"color"`
-	MaxWidth  int      `yaml:"maxwidth"`
-	MinWidth  int      `yaml:"minwidth"`
-	Align     string   `yaml:"align"`
-	AutoMerge bool     `yaml:"automerge"`
+	Name      string  `yaml:"name"`
+	Paint     []Paint `yaml:"paint"`
+	MaxWidth  int     `yaml:"maxwidth"`
+	MinWidth  int     `yaml:"minwidth"`
+	Align     string  `yaml:"align"`
+	AutoMerge bool    `yaml:"automerge"`
 }
 
 type YamlConfig struct {

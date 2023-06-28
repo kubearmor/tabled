@@ -85,9 +85,9 @@ func colorNameToEnum(cstr string) (text.Color, error) {
 	return offset + text.Color(cidx), nil
 }
 
-func getTextColors(col config.ColConfig) text.Colors {
+func getTextColors(paint config.Paint) text.Colors {
 	var colors text.Colors
-	for _, color := range col.Color {
+	for _, color := range paint.Color {
 		c, err := colorNameToEnum(color)
 		if err != nil {
 			log.Printf("invalid color <%s>", color)
@@ -170,17 +170,19 @@ func Csv2Table(cfg config.Config) {
 	t.SetRowPainter(func(row table.Row) text.Colors {
 		for _, col := range cfg.YamlCfg.Columns {
 			idx := slices.Index(hdr, col.Name)
-			colors := getTextColors(col)
 			if idx < 0 {
 				continue
 			}
-			if len(colors) <= 0 || col.Spec == "" {
-				continue
-			}
-			if colval, ok := row[idx].(string); ok {
-				match, _ := regexp.MatchString(col.Spec, colval)
-				if match {
-					return colors
+			for _, p := range col.Paint {
+				colors := getTextColors(p)
+				if len(colors) <= 0 || p.Regex == "" {
+					continue
+				}
+				if colval, ok := row[idx].(string); ok {
+					match, _ := regexp.MatchString(p.Regex, colval)
+					if match {
+						return colors
+					}
 				}
 			}
 		}
