@@ -1,14 +1,24 @@
+# color spec:
+# Reset, Bold, Faint, Italic, Underline, BlinkSlow, BlinkRapid, ReverseVideo, Concealed, CrossedOut
+# {Fg, Bg, FgHi, BgHi} => Black, Red, Green, Yellow, Blue, Magenta, Cyan, White
 ---
 table:
   title: "Kubernetes Cluster Service Ports status"
 columns:
-  - name: STATUS
+  - name: Status
     spec: PLAIN_TEXT
     color:
-      - BgYellow
       - FgRed
-  - name: STATUS
-    spec: CONNFAIL
+  - name: Status
+    spec: "CONN.*"
     color:
-      - BgYellow
-      - FgBlack
+      - FgYellow
+  - name: Verification
+    spec: ".*expired.*"
+    color:
+      - BlinkSlow
+      - FgHiRed
+  - name: Verification
+    spec: ".*self-signed.*certificate"
+    color:
+      - FgCyan

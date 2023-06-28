@@ -19,10 +19,16 @@ package drawtable
 
 import (
 	"encoding/csv"
+	"errors"
 	"log"
 	"os"
+	"regexp"
+	"strings"
 
-	"github.com/jedib0t/go-pretty/v6/table"
+	"github.com/jedib0t/go-pretty/table"
+	"github.com/jedib0t/go-pretty/text"
+	"golang.org/x/exp/slices"
+
 	//"github.com/jedib0t/go-pretty/v6/text"
 	"github.com/nyrahul/tabled/pkg/config"
 )
@@ -51,6 +57,47 @@ func getRow(rec []string) table.Row {
 	return row
 }
 
+func colorNameToEnum(cstr string) (text.Color, error) {
+	offset := text.Reset
+	stroffset := 0
+	var colors []string
+	colors = []string{"Black", "Red", "Green", "Yellow", "Blue", "Magenta", "Cyan", "White"}
+	if strings.HasPrefix(cstr, "FgHi") {
+		offset = text.FgHiBlack
+		stroffset = 4
+	} else if strings.HasPrefix(cstr, "Fg") {
+		offset = text.FgBlack
+		stroffset = 2
+	} else if strings.HasPrefix(cstr, "BgHi") {
+		offset = text.BgHiBlack
+		stroffset = 4
+	} else if strings.HasPrefix(cstr, "Bg") {
+		offset = text.BgBlack
+		stroffset = 2
+	} else {
+		colors = []string{"Reset", "Bold", "Faint", "Italic", "Underline", "BlinkSlow",
+			"BlinkRapid", "ReverseVideo", "Concealed", "CrossedOut"}
+	}
+	cidx := slices.Index(colors, cstr[stroffset:])
+	if cidx < 0 {
+		return offset, errors.New("invalid color")
+	}
+	return offset + text.Color(cidx), nil
+}
+
+func getTextColors(col config.ColConfig) text.Colors {
+	var colors text.Colors
+	for _, color := range col.Color {
+		c, err := colorNameToEnum(color)
+		if err != nil {
+			log.Printf("invalid color <%s>", color)
+			continue
+		}
+		colors = append(colors, c)
+	}
+	return colors
+}
+
 func Csv2Table(cfg config.Config) {
 	records := readCsvFile(cfg.InFile)
 	if len(records) <= 1 {
@@ -65,27 +112,32 @@ func Csv2Table(cfg config.Config) {
 		t.SetTitle(cfg.YamlCfg.Table.Title)
 	}
 	t.SetOutputMirror(os.Stdout)
+	var hdr []string
 	for idx, rec := range records {
 		if idx == 0 {
+			hdr = rec
 			t.AppendHeader(getRow(rec))
 		} else {
 			t.AppendRow(getRow(rec))
 		}
 	}
-	/*
-		t.SetRowPainter(func(row table.Row) text.Colors {
-			if status, ok := row[2].(string); ok {
-				fmt.Printf("Status=%s\n", status)
-				if status == "PLAIN_TEXT" {
-					return text.Colors{text.FgRed}
-				} else if status == "CONNFAIL" {
-					return text.Colors{text.FgYellow}
+	t.SetRowPainter(func(row table.Row) text.Colors {
+		for _, col := range cfg.YamlCfg.Columns {
+			idx := slices.Index(hdr, col.Name)
+			colors := getTextColors(col)
+			if idx < 0 && len(colors) <= 0 {
+				continue
+			}
+			if colval, ok := row[idx].(string); ok {
+				match, _ := regexp.MatchString(col.Spec, colval)
+				if match {
+					return colors
 				}
 			}
-			return nil
-		})*/
+		}
+		return nil
+	})
 	t.SetStyle(table.StyleLight)
-	//	t.SetStyle(table.StyleColoredBright)
 	t.Render()
 	// t.RenderMarkdown()
 }
