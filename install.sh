@@ -65,12 +65,12 @@ execute() {
 }
 get_binaries() {
   case "$PLATFORM" in
-    darwin/amd64) BINARIES="karmor" ;;
-    darwin/arm64) BINARIES="karmor" ;;
-    linux/amd64) BINARIES="karmor" ;;
-    linux/arm64) BINARIES="karmor" ;;
-    windows/amd64) BINARIES="karmor" ;;
-    windows/arm64) BINARIES="karmor" ;;
+    darwin/amd64) BINARIES="$BINARY" ;;
+    darwin/arm64) BINARIES="$BINARY" ;;
+    linux/amd64) BINARIES="$BINARY" ;;
+    linux/arm64) BINARIES="$BINARY" ;;
+    windows/amd64) BINARIES="$BINARY" ;;
+    windows/arm64) BINARIES="$BINARY" ;;
     *)
       log_crit "platform $PLATFORM is not supported.  Make sure this script is up-to-date and file request at https://github.com/${PREFIX}/issues/new"
       exit 1
@@ -338,7 +338,7 @@ EOF
 PROJECT_NAME="tabled"
 OWNER=nyrahul
 REPO="tabled"
-BINARY=karmor
+BINARY=tabled
 FORMAT=tar.gz
 OS=$(uname_os)
 ARCH=$(uname_arch)
