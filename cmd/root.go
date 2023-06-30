@@ -23,7 +23,6 @@ import (
 
 	"github.com/nyrahul/tabled/pkg/config"
 	"github.com/nyrahul/tabled/pkg/drawtable"
-	"github.com/nyrahul/tabled/pkg/version"
 	"github.com/spf13/cobra"
 )
 
@@ -49,7 +48,6 @@ func init() {
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
-	log.Printf("version: %s\n", version.Version)
 	cobra.CheckErr(rootCmd.Execute())
 	cfg.YamlCfg = config.LoadYAMLConfig(yamlFile)
 	if strings.HasSuffix(cfg.InFile, ".csv") {

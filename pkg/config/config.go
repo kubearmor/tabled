@@ -64,7 +64,6 @@ func LoadYAMLConfig(file string) YamlConfig {
 	if err != nil {
 		log.Fatalf("failed reading from yaml config <%s> error: %v", file, err)
 	}
-	log.Printf("reading from yaml config <%s>", file)
 	y := YamlConfig{}
 	err = yaml.Unmarshal([]byte(data), &y)
 	if err != nil {
