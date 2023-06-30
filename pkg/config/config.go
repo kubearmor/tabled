@@ -29,6 +29,7 @@ type TableConfig struct {
 	Caption  string `yaml:"caption"`
 	Markdown string `yaml:"markdown"`
 	Html     string `yaml:"html"`
+	Nostdout bool   `yaml:"nostdout"`
 }
 
 type Paint struct {

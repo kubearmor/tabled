@@ -6,6 +6,11 @@
 #   default | left | center | justify | right
 #   ref: https://github.com/jedib0t/go-pretty/blob/main/text/align.go#L11
 #
+# table:
+#   title: "Title"
+#   markdown: /tmp/markdown.md
+#   html: /tmp/html.html
+#   nostdout: true   # Disable rendering table to stdout
 # columns:
 #   - name: XYZ
 #     maxwidth: 10

@@ -1,0 +1,13 @@
+Name,Address,Status,Version,Ciphersuite,Hash,Signature,Verification
+"Google","google.com:443","TLS","TLSv1.3","TLS_AES_256_GCM_SHA384","SHA256","ECDSA","OK"
+"Accuknox","accuknox.com:443","TLS","TLSv1.3","TLS_AES_256_GCM_SHA384","SHA256","RSA-PSS","OK"
+"BadSSL","expired.badssl.com:443","TLS","TLSv1.2","ECDHE-RSA-AES128-GCM-SHA256","SHA512","RSA","certificate has expired"
+"BadSSL","wrong.host.badssl.com:443","TLS","TLSv1.2","ECDHE-RSA-AES128-GCM-SHA256","SHA512","RSA","OK"
+"BadSSL","self-signed.badssl.com:443","TLS","TLSv1.2","ECDHE-RSA-AES128-GCM-SHA256","SHA512","RSA","self-signed certificate"
+"BadSSL","untrusted-root.badssl.com:443","TLS","TLSv1.2","ECDHE-RSA-AES128-GCM-SHA256","SHA512","RSA","self-signed certificate in certificate chain"
+"BadSSL","revoked.badssl.com:443","TLS","TLSv1.2","ECDHE-RSA-AES128-GCM-SHA256","SHA512","RSA","certificate has expired"
+"BadSSL","pinning-test.badssl.com:443","TLS","TLSv1.2","ECDHE-RSA-AES128-GCM-SHA256","SHA512","RSA","OK"
+"BadSSL","dh480.badssl.com:443","PLAIN_TEXT","","","","",""
+"LocalTest","isunknownaddress.com:12345","CONNFAIL","","","","",""
+"localhost:9090","localhost:9090","CONNFAIL","","","","",""
+"namespace:deployment/wordpress","localhost:22","PLAIN_TEXT","","","","",""

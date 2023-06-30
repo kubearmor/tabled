@@ -208,7 +208,9 @@ func Csv2Table(cfg config.Config) {
 		return nil
 	})
 	t.SetStyle(table.StyleLight)
-	t.Render()
+	if !cfg.YamlCfg.Table.Nostdout {
+		t.Render()
+	}
 	write2file(t, cfg.YamlCfg.Table.Markdown, "md")
 	write2file(t, cfg.YamlCfg.Table.Html, "html")
 }
