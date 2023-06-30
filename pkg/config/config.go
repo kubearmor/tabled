@@ -25,8 +25,10 @@ import (
 )
 
 type TableConfig struct {
-	Title   string `yaml:"title"`
-	Caption string `yaml:"caption"`
+	Title    string `yaml:"title"`
+	Caption  string `yaml:"caption"`
+	Markdown string `yaml:"markdown"`
+	Html     string `yaml:"html"`
 }
 
 type Paint struct {

@@ -140,6 +140,25 @@ func getAllColConfigs(hdr []string, cols []config.ColConfig) []table.ColumnConfi
 	return colcfgs
 }
 
+func write2file(t table.Writer, fname string, ftype string) {
+	if fname == "" {
+		return
+	}
+	f, err := os.Create(fname)
+	if err != nil {
+		log.Fatalf("could not create file %s", fname)
+	}
+	defer f.Close()
+	t.SetOutputMirror(f)
+	if ftype == "md" {
+		log.Println("rendering MD")
+		t.RenderMarkdown()
+	} else if ftype == "html" {
+		log.Println("rendering HTML")
+		t.RenderHTML()
+	}
+}
+
 func Csv2Table(cfg config.Config) {
 	records := readCsvFile(cfg.InFile)
 	if len(records) <= 1 {
@@ -190,5 +209,6 @@ func Csv2Table(cfg config.Config) {
 	})
 	t.SetStyle(table.StyleLight)
 	t.Render()
-	// t.RenderMarkdown()
+	write2file(t, cfg.YamlCfg.Table.Markdown, "md")
+	write2file(t, cfg.YamlCfg.Table.Html, "html")
 }

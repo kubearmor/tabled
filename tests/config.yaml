@@ -20,6 +20,8 @@
 ---
 table:
   title: "Kubernetes Cluster Service Ports status"
+  markdown: /tmp/out.md
+  html: /tmp/out.html
 columns:
   - name: Name
     maxwidth: 30
